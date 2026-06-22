@@ -1,19 +1,46 @@
+import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Heart, X } from "lucide-react";
 import { SwipeCard } from "../components/SwipeCard";
 import { couple, SWIPE_OPTIONS } from "../data";
 import type { SwipeOption } from "../data";
 
-type RoletaPageProps = {
-  sessionActive: boolean;
-  swipeQueue: SwipeOption[];
-  votes: { id: number; dir: "left" | "right" }[];
-  matchResult: SwipeOption | null;
-  onStart: () => void;
-  onSwipe: (dir: "left" | "right", id: number) => void;
-};
+export function RoletaPage() {
+  const [sessionActive, setSessionActive] = useState(false);
+  const [swipeQueue, setSwipeQueue] = useState(SWIPE_OPTIONS);
+  const [votes, setVotes] = useState<{ id: number; dir: "left" | "right" }[]>([]);
+  const [matchResult, setMatchResult] = useState<SwipeOption | null>(null);
 
-export function RoletaPage({ sessionActive, swipeQueue, votes, matchResult, onStart, onSwipe }: RoletaPageProps) {
+  const startSession = () => {
+    setSessionActive(true);
+    setMatchResult(null);
+    setSwipeQueue(SWIPE_OPTIONS);
+    setVotes([]);
+  };
+
+  const handleSwipe = (dir: "left" | "right", id: number) => {
+    const option = swipeQueue.find((item) => item.id === id);
+    const nextVotes = [...votes, { id, dir }];
+    setVotes(nextVotes);
+
+    if (dir === "right" && option?.partnerVoted) {
+      setTimeout(() => setMatchResult(option), 300);
+      setSwipeQueue([]);
+      return;
+    }
+
+    const remaining = swipeQueue.filter((item) => item.id !== id);
+    setSwipeQueue(remaining);
+
+    if (remaining.length === 0) {
+      const rightVotes = nextVotes.filter((vote) => vote.dir === "right");
+      const pick = rightVotes.length > 0
+        ? SWIPE_OPTIONS.find((item) => item.id === rightVotes[Math.floor(Math.random() * rightVotes.length)].id)!
+        : SWIPE_OPTIONS[Math.floor(Math.random() * SWIPE_OPTIONS.length)];
+      setTimeout(() => setMatchResult(pick), 400);
+    }
+  };
+
   const hasMatchVote = votes.some(
     (vote) => vote.dir === "right" && SWIPE_OPTIONS.find((option) => option.id === vote.id)?.partnerVoted
   );
@@ -32,7 +59,7 @@ export function RoletaPage({ sessionActive, swipeQueue, votes, matchResult, onSt
           <p className="text-sm mb-6 max-w-xs mx-auto leading-relaxed text-muted-foreground">
             Abra uma sessão para votar em opções de jantar com arraste de cards em tempo real.
           </p>
-          <button className="px-6 py-3 rounded-xl font-semibold text-sm transition-all hover:scale-105 active:scale-95 text-primary" onClick={onStart}>
+          <button className="px-6 py-3 rounded-xl font-semibold text-sm transition-all hover:scale-105 active:scale-95 text-primary" onClick={startSession}>
             Abrir sessão — Jantar de Sexta
           </button>
         </div>
@@ -60,7 +87,7 @@ export function RoletaPage({ sessionActive, swipeQueue, votes, matchResult, onSt
             {matchResult.label}
           </div>
           <br />
-          <button className="text-sm px-4 py-2 rounded-xl font-medium transition-all hover:opacity-80 bg-muted text-muted-foreground" onClick={onStart}>
+          <button className="text-sm px-4 py-2 rounded-xl font-medium transition-all hover:opacity-80 bg-muted text-muted-foreground" onClick={startSession}>
             Nova sessão
           </button>
         </motion.div>
@@ -88,7 +115,7 @@ export function RoletaPage({ sessionActive, swipeQueue, votes, matchResult, onSt
                   index={index}
                   total={swipeQueue.length}
                   isTop={index === swipeQueue.length - 1}
-                  onSwipe={onSwipe}
+                  onSwipe={handleSwipe}
                 />
               ))}
             </AnimatePresence>
@@ -104,7 +131,7 @@ export function RoletaPage({ sessionActive, swipeQueue, votes, matchResult, onSt
               <button
                 onClick={() => {
                   const top = swipeQueue[swipeQueue.length - 1];
-                  if (top) onSwipe("left", top.id);
+                  if (top) handleSwipe("left", top.id);
                 }}
                 className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110 active:scale-95 bg-[#fee2e2] border-2 border-[#fca5a5]"
               >
@@ -117,7 +144,7 @@ export function RoletaPage({ sessionActive, swipeQueue, votes, matchResult, onSt
               <button
                 onClick={() => {
                   const top = swipeQueue[swipeQueue.length - 1];
-                  if (top) onSwipe("right", top.id);
+                  if (top) handleSwipe("right", top.id);
                 }}
                 className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110 active:scale-95 bg-[#dcfce7] border-2 border-[#86efac]"
               >

@@ -1,17 +1,18 @@
 import { ChevronRight, Check, Coins, Heart, MapPin, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ActionTile, MetricCard, SectionHeader } from "../components";
-import type { Task, Memory } from "../data";
+import { useAppData } from "../contexts/AppDataContext";
+import type { Memory } from "../data";
 import { couple } from "../data";
 
 type HomePageProps = {
-  balance: number;
-  tasks: Task[];
   memories: Memory[];
 };
 
-export function HomePage({ balance, tasks, memories }: HomePageProps) {
+export function HomePage({ memories }: HomePageProps) {
   const navigate = useNavigate();
+  const { balance, tasks } = useAppData();
+  
   const approved = tasks.filter((task) => task.status === "approved").length;
   const pending = tasks.filter((task) => task.status === "pending").length;
 

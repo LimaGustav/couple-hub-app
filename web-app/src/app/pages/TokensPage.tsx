@@ -1,19 +1,11 @@
 import { ArrowDownRight, ArrowUpRight, Check, Coins, Plus } from "lucide-react";
 import { useState } from "react";
-import type { LedgerEntry, StoreItem, Task } from "../data";
+import { useAppData } from "../contexts/AppDataContext";
+import { STORE_ITEMS } from "../data";
 
-type TokensPageProps = {
-  balance: number;
-  tasks: Task[];
-  store: StoreItem[];
-  ledger: LedgerEntry[];
-  flashRedeem: number | null;
-  onApprove: (id: number) => void;
-  onRedeem: (item: StoreItem) => void;
-};
-
-export function TokensPage({ balance, tasks, store, ledger, flashRedeem, onApprove, onRedeem }: TokensPageProps) {
+export function TokensPage() {
   const [tab, setTab] = useState<"tasks" | "store" | "ledger">("tasks");
+  const { balance, tasks, ledger, flashRedeem, approveTask, redeem } = useAppData();
 
   return (
     <div className="p-5 md:p-8 max-w-3xl mx-auto">
@@ -61,7 +53,7 @@ export function TokensPage({ balance, tasks, store, ledger, flashRedeem, onAppro
               )}
               {task.status === "pending" && (
                 <button
-                  onClick={() => onApprove(task.id)}
+                  onClick={() => approveTask(task.id)}
                   className="text-xs px-3 py-1.5 rounded-lg font-semibold transition-all hover:scale-105 active:scale-95 flex-shrink-0 bg-primary text-primary-foreground"
                 >
                   Aprovar
@@ -77,7 +69,7 @@ export function TokensPage({ balance, tasks, store, ledger, flashRedeem, onAppro
 
       {tab === "store" && (
         <div className="grid grid-cols-2 gap-3">
-          {store.map((item) => {
+          {STORE_ITEMS.map((item) => {
             const canAfford = balance >= item.tokens;
             const done = flashRedeem === item.id;
             return (
@@ -89,7 +81,7 @@ export function TokensPage({ balance, tasks, store, ledger, flashRedeem, onAppro
                     {item.tokens}
                   </span>
                   <button
-                    onClick={() => onRedeem(item)}
+                    onClick={() => redeem(item)}
                     disabled={!canAfford}
                     className={`text-xs px-3 py-1.5 rounded-lg font-semibold transition-all hover:scale-105 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed ${
                       done ? "bg-[#22c55e] text-white" : "bg-primary text-primary-foreground"
