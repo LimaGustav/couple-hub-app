@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoveSync - O Hub do Casal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #FDF3F5;
+            --bg-sidebar: #FFFFFF;
+            --primary-maroon: #9C1C46;
+            --primary-light-pink: #FCE6EC;
+            --card-green: #EAF7EE;
+            --card-yellow: #FFF9E6;
+            --text-dark: #2D2D2D;
+            --text-muted: #757575;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- SIDEBAR --- */
+        aside {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-right: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .brand h1 {
+            font-size: 22px;
+            color: var(--primary-maroon);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .brand span {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            display: block;
+            margin-top: 2px;
+        }
+
+        .couple-profile {
+            background-color: #FFF5F7;
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 32px;
+            text-align: center;
+            position: relative;
+        }
+
+        .avatars {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .avatar-name {
+            font-size: 11px;
+            color: var(--text-dark);
+            font-weight: 600;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .days-together {
+            font-size: 12px;
+            color: var(--primary-maroon);
+            font-weight: 500;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .token-badge-btn {
+            background-color: var(--primary-maroon);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px;
+            transition: opacity 0.2s;
+        }
+
+        .token-badge-btn:hover {
+            opacity: 0.9;
+        }
+
+        .nav-menu {
+            margin-top: 32px;
+            list-style: none;
+            flex-grow: 1;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            transition: all 0.2s;
+        }
+
+        .nav-item.active a {
+            background-color: var(--primary-maroon);
+            color: white;
+        }
+
+        .nav-item:not(.active) a:hover {
+            background-color: #FFF5F7;
+            color: var(--primary-maroon);
+        }
+
+        .sidebar-footer {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        /* --- MAIN CONTENT --- */
+        main {
+            flex: 1;
+            padding: 40px 56px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        header {
+            margin-bottom: 32px;
+        }
+
+        header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        header .date {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Top Cards Summary */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .summary-card {
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 120px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+        }
+
+        .summary-card.tokens { background-color: var(--primary-light-pink); }
+        .summary-card.approved { background-color: var(--card-green); }
+        .summary-card.pending { background-color: var(--card-yellow); }
+
+        .card-icon-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        .tokens .card-icon-circle { background-color: var(--primary-maroon); color: white; }
+        .approved .card-icon-circle { background-color: #2E7D32; color: white; }
+        .pending .card-icon-circle { background-color: #EF6C00; color: white; }
+
+        .summary-card .value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-top: 12px;
+            line-height: 1;
+        }
+
+        .summary-card .label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* Sections Layout */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .section-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .section-header .view-all {
+            font-size: 13px;
+            color: var(--primary-maroon);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Memory Banner */
+        .memory-banner {
+            position: relative;
+            border-radius: 20px;
+            height: 240px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 20%, rgba(0,0,0,0.1) 100%), 
+                        url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 24px;
+            color: white;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .memory-text {
+            font-size: 15px;
+            font-weight: 500;
+            max-width: 80%;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .memory-meta {
+            font-size: 12px;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Quick Actions Grid */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .action-card {
+            background-color: #FFFFFF;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+
+        .action-card:hover {
+            border-color: var(--primary-light-pink);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(156,28,70,0.05);
+        }
+
+        .action-icon {
+            font-size: 24px;
+            background-color: #FAFAFA;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-info h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .action-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div>
+            <div class="brand">
+                <h1>❤️ LoveSync</h1>
+                <span>O Hub do Casal</span>
+            </div>
+
+            <div class="couple-profile">
+                <div class="avatars">
+                    <div class="avatar-wrapper">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Ana" class="avatar">
+                        <span class="avatar-name">Ana</span>
+                    </div>
+                    <div class="avatar-wrapper">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" alt="Bruno" class="avatar">
+                        <span class="avatar-name">Bruno</span>
+                    </div>
+                </div>
+                <div class="days-together">❤️ 872 dias juntos</div>
+            </div>
+
+            <button class="token-badge-btn">
+                <span>🎫</span> 340 Love Tokens
+            </button>
+
+            <ul class="nav-menu">
+                <li class="nav-item active">
+                    <a href="#"><span>🏠</span> Início</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#"><span>🔀</span> Roleta</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#"><span>🪙</span> Tokens</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#"><span>📅</span> Timeline</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-footer">
+            Juntos desde<br><strong>14 de Fevereiro, 2022</strong>
+        </div>
+    </aside>
+
+    <main>
+        <header>
+            <h2>Bom dia, Ana! 👋</h2>
+            <div class="date">Sábado, 21 de Junho de 2026</div>
+        </header>
+
+        <section class="summary-grid">
+            <div class="summary-card tokens">
+                <div class="card-icon-circle">🪙</div>
+                <div>
+                    <div class="value">340</div>
+                    <div class="label">Love Tokens</div>
+                </div>
+            </div>
+            <div class="summary-card approved">
+                <div class="card-icon-circle">✓</div>
+                <div>
+                    <div class="value">1</div>
+                    <div class="label">Aprovadas</div>
+                </div>
+            </div>
+            <div class="summary-card pending">
+                <div class="card-icon-circle">⚡</div>
+                <div>
+                    <div class="value">2</div>
+                    <div class="label">Pendentes</div>
+                </div>
+            </div>
+        </section>
+
+        <section style="margin-bottom: 40px;">
+            <div class="section-header">
+                <h3>Última memória</h3>
+                <a href="#" class="view-all">Ver todas ›</a>
+            </div>
+            <div class="memory-banner">
+                <div class="memory-text">
+                    Nosso primeiro pôr do sol em Florianópolis. Esse momento ficará para sempre no coração 🌅
+                </div>
+                <div class="memory-meta">
+                    📍 Florianópolis, SC - 15 Jun 2026
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <h3>Ações rápidas</h3>
+            </div>
+            <div class="actions-grid">
+                <div class="action-card">
+                    <div class="action-icon">🎲</div>
+                    <div class="action-info">
+                        <h4>Abrir votação</h4>
+                        <p>Decida algo juntos</p>
+                    </div>
+                </div>
+                <div class="action-card">
+                    <div class="action-icon">✅</div>
+                    <div class="action-info">
+                        <h4>Registrar tarefa</h4>
+                        <p>Ganhe Love Tokens</p>
+                    </div>
+                </div>
+                <div class="action-card">
+                    <div class="action-icon">🎁</div>
+                    <div class="action-info">
+                        <h4>Resgatar cupom</h4>
+                        <p>Use seus tokens</p>
+                    </div>
+                </div>
+                <div class="action-card">
+                    <div class="action-icon">📸</div>
+                    <div class="action-info">
+                        <h4>Postar memória</h4>
+                        <p>Eternize um momento</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

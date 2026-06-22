@@ -1,0 +1,36 @@
+@LoveSync.IdentityGateway_HostAddress = http://localhost:5080
+
+### Health
+GET {{LoveSync.IdentityGateway_HostAddress}}/health
+
+### Register
+POST {{LoveSync.IdentityGateway_HostAddress}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Ana",
+  "email": "ana@lovesync.dev",
+  "password": "SenhaSegura123"
+}
+
+### Login
+POST {{LoveSync.IdentityGateway_HostAddress}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "ana@lovesync.dev",
+  "password": "SenhaSegura123"
+}
+
+### Pair (requires Bearer token from login)
+POST {{LoveSync.IdentityGateway_HostAddress}}/auth/pair
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "invitationCode": "ABC12345"
+}
+
+### Gateway - Tasks (requires Bearer token)
+GET {{LoveSync.IdentityGateway_HostAddress}}/api/tasks/
+Authorization: Bearer {{token}}
