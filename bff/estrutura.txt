@@ -1,0 +1,22 @@
+src/
+└── CoupleHub.Bff/
+    ├── Program.cs                      # Inicialização do YARP, JWT, Cors e Rate Limiting
+    ├── appsettings.json                # O SEGREDO: Onde ficam as regras de rotas do YARP
+    ├── CoupleHub.Bff.csproj             # Projeto .NET 10 Web API (vazio)
+    │
+    ├── 📂 Middlewares/                 # Interceptadores globais de requisições, injeta dados do token
+    │   └── ClaimsTransformationMiddleware.cs # Opcional: injeta dados extras no header
+    │
+    ├── 📂 Features/                    # Para endpoints customizados (Agregações)
+    │   └── 📂 TimelineSummary/         # Exemplo: Se precisar juntar dados de 2 microsserviços
+    │       ├── TimelineSummaryEndpoint.cs
+    │       └── TimelineSummaryDto.cs
+    │
+    |
+    |___ 📂 Extensions/                  # # Extensões para deixar o Program.cs limpo
+    │   ├── DependencyInjection.cs      # Registro de Clients HTTP (HttpClient do Identity, Tasks, etc)
+    │   └── EndpointExtensions.cs       # Mapeia automaticamente as Minimal APIs da pasta Features 
+    │
+    └── 📂 Common/                      # Políticas e configurações reutilizáveis
+        ├── CorsPolicies.cs             # Liberação do CORS apenas para o seu app React
+        └── RateLimitPolicies.cs        # Proteção contra ataques de negação de serviço (DDoS)

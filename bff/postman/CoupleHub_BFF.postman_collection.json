@@ -1,0 +1,292 @@
+{
+	"info": {
+		"_postman_id": "8f3a3d5b-bf42-4fdf-9730-1c0b8fdeea11",
+		"name": "CoupleHub BFF API",
+		"description": "Collection de testes para o BFF do CoupleHub, cobrindo as rotas proxy (Identity, Tasks, MatchHub) e rotas locais agregadas.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth (Identity Service Proxy)",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Salva o token JWT retornado na variável global/coleção",
+									"var jsonData = pm.response.json();",
+									"if (jsonData.token) {",
+									"    pm.collectionVariables.set(\"jwt_token\", jsonData.token);",
+									"}"
+								],
+								"type": "javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"usuario@exemplo.com\",\n  \"password\": \"SenhaForte123!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Autentica o usuário e salva o JWT Token na coleção para chamadas autenticadas automáticas."
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Nome de Exemplo\",\n  \"email\": \"usuario@exemplo.com\",\n  \"password\": \"SenhaForte123!\",\n  \"partnerEmail\": \"parceiro@exemplo.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Registra um novo usuário no CoupleHub (Redirecionado para o Identity Service)."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tasks (Tasks Service Proxy)",
+			"item": [
+				{
+					"name": "Obter Todas as Tarefas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/tasks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"tasks"
+							]
+						},
+						"description": "Retorna a lista de tarefas associadas ao casal. Requer autenticação."
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Tarefa",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Organizar jantar romântico\",\n  \"description\": \"Reservar mesa no restaurante italiano favorito\",\n  \"dueDate\": \"2026-07-12T20:00:00Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/tasks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"tasks"
+							]
+						},
+						"description": "Adiciona uma nova tarefa ao casal. Requer autenticação."
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Status da Tarefa",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"Concluído\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/tasks/{{tarefaId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"tasks",
+								"{{tarefaId}}"
+							]
+						},
+						"description": "Atualiza o progresso de uma tarefa específica. Requer autenticação."
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Tarefa",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/tasks/{{tarefaId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"tasks",
+								"{{tarefaId}}"
+							]
+						},
+						"description": "Remove uma tarefa do sistema. Requer autenticação."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Match (SignalR Hub Proxy)",
+			"item": [
+				{
+					"name": "Negotiate Connection (SignalR)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/hubs/match/negotiate?negotiateVersion=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"hubs",
+								"match",
+								"negotiate"
+							],
+							"query": [
+								{
+									"key": "negotiateVersion",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Inicia a negociação de protocolo para estabelecer a conexão WebSockets/SignalR com o Match Hub."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "BFF Local (Aggregations)",
+			"item": [
+				{
+					"name": "Obter Sumário da Timeline",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/timeline/summary",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"timeline",
+								"summary"
+							]
+						},
+						"description": "Consome localmente no BFF dados consolidados simulados da Timeline (dados do parceiro + tarefas pendentes). Requer autenticação e possui Rate Limiting."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5070",
+			"type": "string"
+		},
+		{
+			"key": "jwt_token",
+			"value": "INSERIR_TOKEN_JWT_AQUI",
+			"type": "string"
+		},
+		{
+			"key": "tarefaId",
+			"value": "substituir-por-id-da-tarefa",
+			"type": "string"
+		}
+	]
+}

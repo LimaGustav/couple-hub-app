@@ -1,0 +1,100 @@
+[
+  {
+    "ContainingType": "identity_service.Features.Users.Login.LoginEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapLogin\u003Eb__0_0",
+    "RelativePath": "v1/auth/login",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "identity_service.Features.Users.Login.LoginRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "Auth"
+    ],
+    "EndpointName": "Login"
+  },
+  {
+    "ContainingType": "identity_service.Features.Users.RegisterUser.RegisterUserEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapRegisterUser\u003Eb__0_0",
+    "RelativePath": "v1/auth/register",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "identity_service.Features.Users.RegisterUser.RegisterUserRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "Auth"
+    ],
+    "EndpointName": "RegisterUser"
+  },
+  {
+    "ContainingType": "identity_service.Features.Couples.CreateCouple.CreateCoupleEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapCreateCouple\u003Eb__0_0",
+    "RelativePath": "v1/couples",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "Couples"
+    ],
+    "EndpointName": "CreateCouple"
+  },
+  {
+    "ContainingType": "identity_service.Features.Couples.JoinCouple.JoinCoupleEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapJoinCouple\u003Eb__0_0",
+    "RelativePath": "v1/couples/join",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "identity_service.Features.Couples.JoinCouple.JoinCoupleRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "Couples"
+    ],
+    "EndpointName": "JoinCouple"
+  }
+]

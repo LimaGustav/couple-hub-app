@@ -1,0 +1,40 @@
+src/
+└── IdentityService/
+    ├── Program.cs                      # Inicialização da API, Middlewares e DI
+    ├── IdentityService.csproj          # Arquivo de configuração do projeto .NET 10
+    │
+    ├── 📂 Features/                    # ONDE A MÁGICA ACONTECE (Fatias Verticais)
+    │   ├── 📂 Users/                   # Grupo de funcionalidades de Usuários
+    │   │   ├── 📂 RegisterUser/        # Funcionalidade: Cadastro de Usuário
+    │   │   │   ├── RegisterUserEndpoint.cs  # Minimal API (Rota: POST /v1/auth/register)
+    │   │   │   ├── RegisterUserRequest.cs   # Record DTO com dados de entrada (JSON)
+    │   │   │   └── RegisterUserResponse.cs  # Record DTO com dados de saída
+    │   │   │
+    │   │   └── 📂 Login/               # Funcionalidade: Autenticação
+    │   │       ├── LoginEndpoint.cs         # Minimal API (Rota: POST /v1/auth/login)
+    │   │       ├── LoginRequest.cs          # DTO de entrada
+    │   │       └── LoginResponse.cs         # DTO de saída (retorna o Token JWT)
+    │   │
+    │   └── 📂 Couples/                 # Grupo de funcionalidades do Casal
+    │       ├── 📂 CreateCouple/        # Funcionalidade: Criar um Casal (Gera Convite)
+    │       │   ├── CreateCoupleEndpoint.cs  # Rota: POST /v1/couples
+    │       │   └── CreateCoupleRequest.cs
+    │       │
+    │       └── 📂 JoinCouple/          # Funcionalidade: Aceitar Convite / Vincular
+    │           ├── JoinCoupleEndpoint.cs    # Rota: POST /v1/couples/join
+    │           └── JoinCoupleRequest.cs
+    │
+    ├── 📂 Infrastructure/              # Coisas globais de Infraestrutura técnica
+    │   ├── 📂 Data/                    # Persistência de Dados
+    │   │   ├── IdentityDbContext.cs    # DbContext gerado pelo Scaffold
+    │   │   └── 📂 Models/              # ENTIDADES GERADAS PELO SCAFFOLD
+    │   │       ├── User.cs             # Classe User (gerada automaticamente)
+    │   │       └── Couple.cs           # Classe Couple (gerada automaticamente)
+    │   │
+    │   └── 📂 Security/                # Utilitários de Segurança
+    │       ├── TokenService.cs         # Classe que gera o JWT contendo o UserId e CoupleId
+    │       └── PasswordHasher.cs       # Classe para criptografar/verificar senhas (BCrypt/Argon2)
+    │
+    └── 📂 Common/                      # Códigos utilitários compartilhados no serviço
+        └── Errors/
+            └── ProblemDetailsExtensions.cs # Padronização de respostas de erro da API

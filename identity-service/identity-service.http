@@ -1,0 +1,73 @@
+@identity_service_HostAddress = http://localhost:5013
+
+### 1. Register User A
+POST {{identity_service_HostAddress}}/v1/auth/register
+Content-Type: application/json
+
+{
+  "username": "user.a@couplehub.com",
+  "password": "SecurePassword123!",
+  "name": "User Alice",
+  "birthday": "1998-05-15"
+}
+
+###
+
+### 2. Register User B
+POST {{identity_service_HostAddress}}/v1/auth/register
+Content-Type: application/json
+
+{
+  "username": "user.b@couplehub.com",
+  "password": "SecurePassword123!",
+  "name": "User Bob",
+  "birthday": "1997-10-20"
+}
+
+###
+
+### 3. Login User A (Retrieve JWT Token)
+# @name loginA
+POST {{identity_service_HostAddress}}/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "user.a@couplehub.com",
+  "password": "SecurePassword123!"
+}
+
+###
+
+@tokenA = {{loginA.response.body.token}}
+
+### 4. Login User B (Retrieve JWT Token)
+# @name loginB
+POST {{identity_service_HostAddress}}/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "user.b@couplehub.com",
+  "password": "SecurePassword123!"
+}
+
+###
+
+@tokenB = {{loginB.response.body.token}}
+
+### 5. Create Couple (Authenticated User A)
+POST {{identity_service_HostAddress}}/v1/couples
+Authorization: Bearer {{tokenA}}
+Content-Type: application/json
+
+{}
+
+###
+
+### 6. Join Couple (Authenticated User B joining User A's couple by Username)
+POST {{identity_service_HostAddress}}/v1/couples/join
+Authorization: Bearer {{tokenB}}
+Content-Type: application/json
+
+{
+  "partnerUsername": "user.a@couplehub.com"
+}

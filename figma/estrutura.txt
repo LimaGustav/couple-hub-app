@@ -1,0 +1,26 @@
+src/
+├── 📂 core/                        # Estrutura global invariável
+│   ├── 📂 api/                     # Instância do Axios e interceptors
+│   ├── 📂 routes/                  # Definição do React Router
+│   └── 📂 providers/               # Contextos globais embrulhados (Auth, Theme)
+│
+├── 📂 features/                    # AS FATIAS VERTICAIS (Domínios de Negócio)
+│   ├── 📂 auth/                    # Tudo do Identity Service
+│   │   ├── 📂 components/          # Componentes exclusivos desta fatia
+│   │   ├── 📂 hooks/               # useAuth, etc.
+│   │   ├── 📂 pages/               # LoginPage, RegisterPage
+│   │   └── 📂 services/            # authService.ts (Chamadas Axios)
+│   │
+│   ├── 📂 match-vote/              # Tudo do Match & Vote Service (SignalR/WebSockets)
+│   │   ├── 📂 components/          # Roleta, botões de votação
+│   │   └── 📂 pages/               # VoteSessionPage
+│   │
+│   └── 📂 wallet/                  # Tudo do Wallet Service (Tokens/Extrato)
+│       ├── 📂 components/          # Card de Saldo, Lista de Transações
+│       └── 📂 pages/               # WalletDashboardPage
+│
+├── 📂 shared/                      # O lixo reciclável e coisas globais
+│   ├── 📂 components/
+│   │   ├── 📂 figma/               # ⚠️ GUARDE SEUS COMPONENTES BRUTOS DO FIGMA AQUI!
+│   │   └── 📂 ui/                  # Componentes limpos e reutilizáveis (Button, Input)
+│   └── 📂 styles/                  # Estilos globais (Reset, Variáveis de Cor, Tailwind)

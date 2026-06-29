@@ -1,0 +1,30 @@
+src/
+├── main.tsx                        # Ponto de entrada do React (Vite)
+├── App.tsx                         # Provedores globais (Rotas, Contextos)
+│
+├── 📂 core/                        # Núcleo da aplicação (Configurações Globais)
+│   ├── 📂 api/
+│   │   └── apiClient.ts            # Instância do Axios + Interceptor para injetar o Token
+│   ├── 📂 context/
+│   │   └── AuthContext.tsx         # Estado global de autenticação (User, CoupleId, Login/Logout)
+│   └── 📂 routes/
+│       ├── AppRoutes.tsx           # Definição e mapeamento de rotas públicas/privadas
+│       └── ProtectedRoute.tsx      # Guard de rotas (Bloqueia acessos não autenticados)
+│
+├── 📂 features/                    # Fatias verticais de funcionalidades do LoveSync
+│   └── 📂 auth/                    # Módulo isolado de Autenticação
+│       ├── 📂 components/          # Componentes visuais exclusivos do Auth
+│       │   ├── LoginForm.tsx
+│       │   └── RegisterForm.tsx
+│       ├── 📂 hooks/
+│       │   └── useAuth.ts          # Hook customizado para consumir o AuthContext facilmente
+│       ├── 📂 pages/               # Telas completas entregues ao Router
+│       │   ├── LoginPage.tsx
+│       │   └── RegisterPage.tsx
+│       └── 📂 services/
+│           └── authService.ts      # Chamadas diretas de API para o BFF (login, register)
+│
+└── 📂 shared/                      # Código compartilhado por múltiplas features
+    ├── 📂 components/              # UI genérica (Button, Input, Loading, Spinners)
+    └── 📂 types/                   # Contratos de tipos globais (Interfaces do TypeScript)
+        └── auth.types.ts           # Tipagem de User, DecodedToken, LoginResponse
